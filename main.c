@@ -174,6 +174,11 @@ void* reverseDelete(void* _g) {
   // Algoritma kenarları aktif olarak sildiği için kenar sayısını sabit tutmamız lazım
   int initialEdgeCount = edgeCount(*g);
   for (edgeIndex = 0; edgeIndex < initialEdgeCount; edgeIndex++) {
+    if (edgeCount(*g) == (g->vertices - 1)) {
+      printf("E = V - 1 koşulu sağlandı.\n");
+      break;
+    }
+
     printf("Selecting\n");
     printf( "%d--%d, w:%d\n"
           , edges[edgeIndex].u
@@ -219,27 +224,25 @@ void* reverseDelete(void* _g) {
 int main(){
   int windowWidth = 500;
   int windowHeight = 500;
+  //SetConfigFlags(FLAG_WINDOW_RESIZABLE);
   InitWindow(windowWidth, windowHeight, "Reverse-Delete Algorithm");
   
   Vector2 offset = {-250, -250};
   
   Graph g;
-  initGraph(&g, 6);
+  initGraph(&g, 5);
 
   addEdge(&g, 0, 1, 2);
-  addEdge(&g, 0, 2, 1);
-  addEdge(&g, 0, 4, 3);
-  addEdge(&g, 1, 2, 1);
-  addEdge(&g, 1, 3, 1);
-  addEdge(&g, 1, 4, 2);
-  addEdge(&g, 2, 3, 5);
-  addEdge(&g, 3, 4, 5);
-  addEdge(&g, 3, 5, 5);
-  addEdge(&g, 0, 5, 5);
+  addEdge(&g, 0, 2, 5);
+  addEdge(&g, 0, 3, 4);
+  addEdge(&g, 1, 2, 12);
+  addEdge(&g, 1, 3, 25);
+  addEdge(&g, 2, 3, 2);
+  addEdge(&g, 3, 4, 10);
 
   printDOT(g);
 
-  printf("is connected: %d\n", isConnected(&g));
+  // printf("is connected: %d\n", isConnected(&g));
 
   pthread_t calcThreadId;
   pthread_create(&calcThreadId, NULL, reverseDelete, &g);
@@ -257,11 +260,21 @@ int main(){
   int initialEdgeCount = edgeCount(g);
 
   while (!WindowShouldClose()) {
+
+    windowWidth = GetRenderWidth();
+    windowHeight = GetRenderHeight();
     
-    // Bir sonraki adıma geç
+    // Bir sonraki adıma ilerle
     if (IsKeyPressed(KEY_N)) {
       pthread_cond_signal(&cond);
     }
+
+    // Kamera Hareketi
+    if (IsKeyDown(KEY_W)) offset.y -= 0.05;
+    if (IsKeyDown(KEY_S)) offset.y += 0.05;
+    if (IsKeyDown(KEY_A)) offset.x -= 0.05;
+    if (IsKeyDown(KEY_D)) offset.x += 0.05;
+
 
     BeginDrawing();
     ClearBackground(BLACK);
@@ -272,9 +285,7 @@ int main(){
     if (edges != NULL)
     for(int ei = 0; ei < initialEdgeCount; ei++){
       if (edges[ei].w != INF) {
-        char label[5];
-        sprintf(label, "%d", edges[ei].w);
-        DrawText(label, 20, ei * 25, 20, WHITE);
+        DrawText(TextFormat("%d", edges[ei].w), 20, ei * 25, 20, WHITE);
         DrawLine(40, ei * 25 + 10, 40 + 10 * edges[ei].w, ei * 25 + 10, WHITE);
       }
     }
@@ -284,14 +295,13 @@ int main(){
     // Graf hala bağlı mı?
     bool connected = isConnected(&g);
     DrawText( connected ? "Connected" : "Disconnected"
-            , 20, windowHeight - 30
+            , 20, windowHeight - 50
             , 20
             , connected ? GREEN : RED);
     
     // Grafın toplam ağırlığı
-    char label[30];
-    sprintf(label, "Total Weight: %d", totalEdgeWeight(g));
-    DrawText(label, 20, windowHeight - 5, 20, BLUE);
+    DrawText( TextFormat("Total Weight: %d", totalEdgeWeight(g))
+            , 20, windowHeight - 25, 20, BLUE);
 
 
     // Çizim
@@ -313,8 +323,8 @@ int main(){
       
       // Kenarın ağırlığı
       char label[5];
-      sprintf(label, "%d", weigth(g, u, v));
-      DrawText(label, wPos.x - 5, wPos.y - 5, 20, WHITE); 
+      DrawText( TextFormat("%d", weigth(g, u, v))
+              , wPos.x - 5, wPos.y - 5, 20, WHITE); 
     }
 
     // Düğümler
@@ -323,9 +333,8 @@ int main(){
 
       DrawCircleV(pos, 30, BLUE);
       
-      char label[2];
-      sprintf(label, "%c", 'A'+i);
-      DrawText(label, pos.x - 5, pos.y - 5, 20, WHITE) ;
+      DrawText( TextFormat("%c", 'A'+i)
+              , pos.x - 5, pos.y - 5, 20, WHITE);
     }
 
 
