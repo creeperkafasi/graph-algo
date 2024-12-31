@@ -355,9 +355,8 @@ int main(){
 
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)
      || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) 
+    if (!editing)
     {
-      editing = false;
-
       Vector2 mp = GetMousePosition();
       bool selected = false;
       forEdges(g){
