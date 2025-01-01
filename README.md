@@ -38,7 +38,7 @@ Algoritmanın 3. adımındaki köprü oluşturma kontrolü programda biraz farkl
 ## Karşılaşılan zorluklar
 
 C dilininde bellekte yer ayrılması için programcının açık bir şekilde ayrılacak yer miktarını belirtmesi gerekmektedir ve çalışma zamanında bellekle ilgili işlevlerin doğruluğunu kontrol eden bir araç varsayılan olarak bulunmamaktadır. Bu da bazı hataların kaynağının tespit edilmesini güç kılmaktadır.
-Projenin etkileşimli hale getirilmesi sırasında, yanlış bellek tahsisi ve out-of-bounds erişim gibi hatalar, komşuluk matrisi yapısının yeniden boyutlandırması ve değiştirilmesi durumlarında yaygın olarak ortaya çıktı. Hataların kaynağının tespiti için GCC derleyicisinin `-fsanitize=address` ve `-g` seçenekleri kullanıldı [^4^](#4).
+Projenin etkileşimli hale getirilmesi sırasında, yanlış bellek tahsisi ve out-of-bounds erişim gibi hatalar, komşuluk matrisi yapısının yeniden boyutlandırması ve değiştirilmesi durumlarında yaygın olarak ortaya çıktı. Hataların kaynağının tespiti için GCC derleyicisinin `-fsanitize=address` ve `-g` seçenekleri kullanıldı [<sup>4</sup>](#4).
 
 ## Kaynak kodu ve belgelendirme
 
