@@ -62,6 +62,19 @@ int printDOT(const Graph g) {
   return sum;
 }
 
+// Dot gösterimini stringe yazdır
+int sprintDOT(char* s, const Graph g) {
+  sprintf(s, "graph G {\n");
+  int sum = 0;
+  forEdges(g){
+    if (weight(g, u, v) != INF)
+      sprintf(strchr(s, '\0'),
+              "%c -- %c [label=%d];\n", 'A' + u, 'A' + v, weight(g, u, v));
+  }
+  sprintf(strchr(s, '\0'), "}\n");
+  return sum;
+}
+
 // Graf başlangıç değerlerini boş olarak ayarla
 void initGraph(Graph* g, int vertexCount) {
   g->vertices = vertexCount;
@@ -548,6 +561,14 @@ int main(){
         editing = false;
       };
     }
+
+    // Graphviz için kopyala
+    if(GuiButton((Rectangle){450, 10, 40, 40}, "")) {
+      char s[1024];
+      sprintDOT(s, g);
+      SetClipboardText(s);
+    };
+    GuiDrawIcon(ICON_FILE_COPY, 453, 13, 2, DARKGRAY);
 
     if (calcThreadId == -1) {
       if(GuiButton((Rectangle){390, 460, 100, 30}, "Start")) startAlgo(&g);
