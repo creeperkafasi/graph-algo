@@ -3,7 +3,10 @@
 
 Karadeniz Teknik Üniversitesi Bilgisayar Mühendisliği Bölümü Ayrık Matematik Dersi Yarıyıl Sonu Serbest Ödevi
 
-Deniz Tunç 434377
+| | | 
+| ---------------|------------------------ |
+| Hazırlayan     | Deniz Tunç - 434377     |
+| Ödev Sorumlusu | Doç. Dr. Vasıf Nabiyev  |
 
 ## Projenin Amacı
 
